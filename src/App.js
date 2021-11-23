@@ -13,6 +13,18 @@ const words = [
   "LOVE",
   "COCACOLA",
   "PEPSI",
+  "MISS",
+  "PAPER",
+  "TABLE",
+  "EXIT",
+  "REACTJS",
+  "CODE",
+  "WATER",
+  "LIGHT",
+  "FLOOR",
+  "MUSIC",
+  "TELEPHONE",
+  "MOBILE"
 ];
 
 function App() {
@@ -28,7 +40,7 @@ function App() {
 
   const [score, setScore] = useState(0);
   const [wordNumber, setWordNumber] = useState(1);
-  const [word, setWord] = useState(words[Math.floor(Math.random() * 10)]);
+  const [word, setWord] = useState(words[Math.floor(Math.random() * words.length)]);
   const [newWord, setNewWord] = useState("");
   const [answer, setAnswer] = useState("");
   // const [arr, setArr] = useState(word.split(""));
@@ -66,13 +78,13 @@ function App() {
         alert("Bạn đã trả lời đúng!");
         setScore((prev) => prev + 10);
       } else {
-        alert("Bạn đã trả lời sai!");
+        alert("Bạn đã trả lời sai! Đáp án đúng là: " + word);
       }
 
       if (wordNumber <= 10) {
         setWordNumber((prev) => prev + 1);
         setCounter(10);
-        setWord(words[Math.floor(Math.random() * 10)]);
+        setWord(words[Math.floor(Math.random() * words.length)]);
         setAnswer("");
       }
     }
