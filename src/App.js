@@ -28,44 +28,67 @@ const words = [
 ];
 
 function App() {
+  // const [smShow, setSmShow] = useState(true);
+  const [styl, setStyle] = useState(0);
+  const [timer, setTimer] = useState();
   const [counter, setCounter] = useState(10);
-  useEffect(() => {
-    if (counter === 0) {
-      return;
-    }
-    setTimeout(() => {
-      setCounter(counter - 1);
-    }, 1000);
-  }, [counter]);
-
   const [score, setScore] = useState(0);
   const [wordNumber, setWordNumber] = useState(1);
   const [word, setWord] = useState(
     words[Math.floor(Math.random() * words.length)]
   );
-  const [newWord, setNewWord] = useState("_");
+  const [newWord, setNewWord] = useState("");
+  const [answer, setAnswer] = useState("_");
 
   const display = (symbol) => {
-    setNewWord((prev) => prev.replace("_", symbol));
+    if (symbol) {
+      setAnswer((prev) => prev.replace("_", symbol));
+    }
   };
 
   useEffect(() => {
     if (counter === 0) {
-      if (newWord === word) {
-        alert("Bạn đã trả lời đúng!");
-        setScore((prev) => prev + 10);
-      } else {
-        alert("Bạn đã trả lời sai! Đáp án đúng là: " + word);
-      }
-
-      if (wordNumber <= 10) {
+      setStyle(2)
+      setNewWord(word)
+      setTimeout(() => {
         setWordNumber((prev) => prev + 1);
-        setCounter(10);
         setWord(words[Math.floor(Math.random() * words.length)]);
-        setNewWord("_")
-      }
+        setStyle(0);
+        setCounter(10);
+      }, 3000);
+      return;
     }
+
+    setTimer(
+      setTimeout(() => {
+        setCounter(counter - 1);
+      }, 1000)
+    );
   }, [counter]);
+
+  useEffect(() => {
+    if (answer.includes("_") === false) {
+      if (answer === word) {
+        setStyle(1);
+        // alert("Bạn đã trả lời đúng!");
+        setScore((prev) => prev + 10);
+        setNewWord(word);
+      } else {
+        setStyle(2);
+        setNewWord(word);
+        // alert("Sai! Đáp án đúng là: " + word)
+      }
+      
+      setTimeout(() => {
+        setWordNumber((prev) => prev + 1);
+        setWord(words[Math.floor(Math.random() * words.length)]);
+        setStyle(0);
+        setCounter(10);
+      }, 3000);
+      clearTimeout(timer);
+      return;
+    }
+  }, [answer]);
 
   useEffect(() => {
     const arr = word.split("");
@@ -73,7 +96,7 @@ function App() {
       if (index === 0) {
         return item;
       } else if (index === 1) {
-        return "_"
+        return "_";
       } else {
         const i = Math.floor(Math.random() * 5);
         if (i === 1) {
@@ -83,6 +106,13 @@ function App() {
     });
     setNewWord(newArr.join(""));
   }, [word]);
+
+  useEffect(() => {
+    if (styl === 0){
+      if (newWord) setAnswer(newWord);
+    }
+    
+  }, [newWord]);
 
   useEffect(() => {
     if (wordNumber === 11) {
@@ -108,6 +138,7 @@ function App() {
         </div>
         <div className="col-4 text-center" id="wordNumber">
           {wordNumber} / 10
+          <div className="fs-2">{styl === 1 ? <i className="fas fa-check-circle" style={{color: "green"}}></i>: styl === 2 ? <i className="fas fa-times-circle" style={{color: "red"}}></i> : ""}</div>
         </div>
         <div className="col-4 text-end" id="timer">
           <p>TIMER:</p>
@@ -120,9 +151,10 @@ function App() {
             type="text"
             style={{ backgroundColor: "#211945", color: "white" }}
             className="form-control text-center fs-3 me-5 ms-5"
-            value={newWord}
+            value={answer}
             disabled
           />
+          
         </div>
         <div id="button">
           <div className="grid m-5">
@@ -211,12 +243,19 @@ function App() {
           </div>
         </div>
         <div
-          className="text-center fs-3 border border-primary border-3"
-          style={{ color: "white" }}
+          className="text-center fs-3"
+          style={
+            styl === 0
+              ? { border: "1px solid white", color: "white"}
+              : styl === 1
+              ? { border: "2px solid green", color: "yellow"}
+              : { border: "2px solid red", color: "red"}
+          }
         >
+           
           {newWord}
         </div>
-      </div>
+      </div>    
     </div>
   );
 }
