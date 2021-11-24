@@ -70,3 +70,13 @@
   border: 1px solid white;
   color: rgb(204, 46, 46);
 }
+
+@keyframes borderr {
+  from {border: 2px solid green;}
+  to {border: 2px solid rgb(91, 88, 214);}
+}
+
+@keyframes border2 {
+  from {border: 2px solid red;}
+  to {border: 2px solid rgb(45, 209, 23);}
+}

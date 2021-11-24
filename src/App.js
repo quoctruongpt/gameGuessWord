@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Modal, Button } from "react-bootstrap";
 import "./App.css";
 
 const words = [
@@ -28,7 +29,7 @@ const words = [
 ];
 
 function App() {
-  // const [smShow, setSmShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [styl, setStyle] = useState(0);
   const [timer, setTimer] = useState();
   const [counter, setCounter] = useState(10);
@@ -46,16 +47,26 @@ function App() {
     }
   };
 
+  const handleClose = () => {
+    setScore(0);
+    setShow(false);
+    clearTimeout(timer);
+    setWordNumber(1);
+    setCounter(10);
+    setWord(words[Math.floor(Math.random() * words.length)]);
+  };
+  const handleShow = () => setShow(true);
+
   useEffect(() => {
     if (counter === 0) {
-      setStyle(2)
-      setNewWord(word)
+      setStyle(2);
+      setNewWord(word);
       setTimeout(() => {
         setWordNumber((prev) => prev + 1);
         setWord(words[Math.floor(Math.random() * words.length)]);
         setStyle(0);
         setCounter(10);
-      }, 3000);
+      }, 1500);
       return;
     }
 
@@ -78,7 +89,7 @@ function App() {
         setNewWord(word);
         // alert("Sai! Đáp án đúng là: " + word)
       }
-      
+
       setTimeout(() => {
         setWordNumber((prev) => prev + 1);
         setWord(words[Math.floor(Math.random() * words.length)]);
@@ -108,18 +119,14 @@ function App() {
   }, [word]);
 
   useEffect(() => {
-    if (styl === 0){
+    if (styl === 0) {
       if (newWord) setAnswer(newWord);
     }
-    
   }, [newWord]);
 
   useEffect(() => {
     if (wordNumber === 11) {
-      setWordNumber(1);
-      setCounter(10);
-      setScore(0);
-      return alert("Điểm của bạn là: " + score);
+      handleShow();
     }
   }, [wordNumber]);
 
@@ -138,7 +145,15 @@ function App() {
         </div>
         <div className="col-4 text-center" id="wordNumber">
           {wordNumber} / 10
-          <div className="fs-2">{styl === 1 ? <i className="fas fa-check-circle" style={{color: "green"}}></i>: styl === 2 ? <i className="fas fa-times-circle" style={{color: "red"}}></i> : ""}</div>
+          <div className="fs-2">
+            {styl === 1 ? (
+              <i className="fas fa-check-circle" style={{ color: "green" }}></i>
+            ) : styl === 2 ? (
+              <i className="fas fa-times-circle" style={{ color: "red" }}></i>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
         <div className="col-4 text-end" id="timer">
           <p>TIMER:</p>
@@ -154,7 +169,6 @@ function App() {
             value={answer}
             disabled
           />
-          
         </div>
         <div id="button">
           <div className="grid m-5">
@@ -246,16 +260,26 @@ function App() {
           className="text-center fs-3"
           style={
             styl === 0
-              ? { border: "1px solid white", color: "white"}
+              ? { border: "2px solid white", color: "white"}
               : styl === 1
-              ? { border: "2px solid green", color: "yellow"}
-              : { border: "2px solid red", color: "red"}
+              ? {animationName: "borderr", animationDuration: "0.5s", animationIterationCount: "1000", color: "white"}
+              : {animationName: "border2", animationDuration: "0.5s", animationIterationCount: "1000", color: "white"}
           }
         >
-           
           {newWord}
         </div>
-      </div>    
+      </div>
+      <Modal show={show}>
+        <Modal.Header closeButton>
+          <Modal.Title>Bạn thắng</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Woohoo, bạn đã xuất sắc đạt được: {score} điểm</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleClose}>
+            Chơi lại
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
