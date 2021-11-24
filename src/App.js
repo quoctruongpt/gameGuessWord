@@ -24,7 +24,7 @@ const words = [
   "FLOOR",
   "MUSIC",
   "TELEPHONE",
-  "MOBILE"
+  "MOBILE",
 ];
 
 function App() {
@@ -40,41 +40,18 @@ function App() {
 
   const [score, setScore] = useState(0);
   const [wordNumber, setWordNumber] = useState(1);
-  const [word, setWord] = useState(words[Math.floor(Math.random() * words.length)]);
-  const [newWord, setNewWord] = useState("");
-  const [answer, setAnswer] = useState("");
-  // const [arr, setArr] = useState(word.split(""));
+  const [word, setWord] = useState(
+    words[Math.floor(Math.random() * words.length)]
+  );
+  const [newWord, setNewWord] = useState("_");
 
   const display = (symbol) => {
-    setAnswer((prev) => prev + symbol);
+    setNewWord((prev) => prev.replace("_", symbol));
   };
-
-  const deleteAnswer = () => {
-    setAnswer((prev) => prev.slice(0, -1));
-  };
-
-  useEffect(() => {
-    // const i = Math.floor(Math.random() * (word.length - 1));
-    // setNewWord(word.slice(0, i) + "_ " + word.slice(i + 1));
-    // const i2 = Math.floor(Math.random() * (word.length - 1));
-    // setNewWord((prev) => prev.slice(0, i2) + "_ " + prev.slice(i2 + 1));
-    // const i3 = Math.floor(Math.random() * (word.length - 1));
-    // setNewWord((prev) => prev.slice(0, i3) + "_ " + prev.slice(i3 + 1));
-
-    const arr = (word.split(""));
-    const newArr = arr.map((item) => {
-      const i = Math.floor(Math.random() * 3);
-      if (i === 0) {
-        return " _ ";
-      } else return " " + item + " ";
-    });
-    setNewWord(newArr.join(''))
-    console.log(word);
-  }, [word]);
 
   useEffect(() => {
     if (counter === 0) {
-      if (answer === word) {
+      if (newWord === word) {
         alert("Bạn đã trả lời đúng!");
         setScore((prev) => prev + 10);
       } else {
@@ -85,10 +62,27 @@ function App() {
         setWordNumber((prev) => prev + 1);
         setCounter(10);
         setWord(words[Math.floor(Math.random() * words.length)]);
-        setAnswer("");
+        setNewWord("_")
       }
     }
   }, [counter]);
+
+  useEffect(() => {
+    const arr = word.split("");
+    const newArr = arr.map((item, index) => {
+      if (index === 0) {
+        return item;
+      } else if (index === 1) {
+        return "_"
+      } else {
+        const i = Math.floor(Math.random() * 5);
+        if (i === 1) {
+          return "_";
+        } else return item;
+      }
+    });
+    setNewWord(newArr.join(""));
+  }, [word]);
 
   useEffect(() => {
     if (wordNumber === 11) {
@@ -124,10 +118,9 @@ function App() {
         <div className="input-group ">
           <input
             type="text"
-            style={{backgroundColor: '#211945', color: 'white'}}
+            style={{ backgroundColor: "#211945", color: "white" }}
             className="form-control text-center fs-3 me-5 ms-5"
-            value={answer}
-            placeholder={newWord}
+            value={newWord}
             disabled
           />
         </div>
@@ -214,9 +207,6 @@ function App() {
             </div>
             <div onClick={() => display("Z")} className="padButton Z">
               Z
-            </div>
-            <div onClick={deleteAnswer} className="padButton DEL">
-              <i className="fas fa-backspace"></i>
             </div>
           </div>
         </div>
