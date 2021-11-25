@@ -8,7 +8,9 @@ import NewWord from "./components/newWord";
 import AnswerInput from "./components/answerInput";
 import Head from "./components/head";
 
+
 function App() {
+  
   const [show, setShow] = useState(false); // biến hiển thị modal thông báo tổng điểm (true: hiện, false: ẩn)
   const [styl, setStyle] = useState(0); // biến đánh dấu đúng sai (0: chưa xác định, 1: đúng, 2: sai)
   const [timer, setTimer] = useState(); // hàm setTimeOut đếm ngược thời gian
@@ -39,6 +41,7 @@ function App() {
   useEffect(() => {
     // xử lý khi hết thời gian 10s
     if (counter === 0) {
+
       setStyle(2);
       setNewWord(word);
       setTimeout(() => {
@@ -47,21 +50,25 @@ function App() {
         setStyle(0);
         setCounter(10);
       }, 1500);
-      return;
+      return
     }
 
     // tự động giảm counter sau mỗi 1s
-    setTimer(
-      setTimeout(() => {
-        setCounter(counter - 1);
-      }, 1000)
-    );
+
+    setTimer(setTimeout(() => {
+      setCounter(counter - 1);
+    }, 1000))
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [counter]);
 
   // hàm xử lý khi người dùng nhập vào từ bàn phím
   useEffect(() => {
     // kiểm tra xem còn khuyết chữ hay không? nếu không thì xử lý
     if (answer.includes("_") === false) {
+      clearTimeout(timer);
       if (answer === word) {
         setStyle(1);
         // alert("Bạn đã trả lời đúng!");
@@ -79,7 +86,6 @@ function App() {
         setStyle(0);
         setCounter(10);
       }, 3000);
-      clearTimeout(timer);
       return;
     }
   }, [answer]);
@@ -132,7 +138,7 @@ function App() {
       {/* phần body */}
       <div className="body mt-3 ">
         <AnswerInput answer={answer} />
-        <GroupButton setAnswer={setAnswer} />
+        <GroupButton setAnswer={setAnswer} styl={styl} />
         <NewWord styl={styl} newWord={newWord} />
       </div>
 

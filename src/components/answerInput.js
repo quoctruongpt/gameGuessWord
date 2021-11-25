@@ -1,6 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 
-export default function AnswerInput({ answer }) {
+function AnswerInput({ answer }) {
   return (
     <div className="input-group ">
       <input
@@ -13,3 +13,5 @@ export default function AnswerInput({ answer }) {
     </div>
   );
 }
+
+export default memo(AnswerInput)

@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { Modal, Button } from "react-bootstrap";
 
-export default function ScoreModal({score, show, onClose}) {
+function ScoreModal({score, show, onClose}) {
   return (
     <div>
       {/* Modal thông báo điểm */}
@@ -19,3 +19,5 @@ export default function ScoreModal({score, show, onClose}) {
     </div>
   );
 }
+
+export default memo(ScoreModal)

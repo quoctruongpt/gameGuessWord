@@ -1,6 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 
-export default function Head({ score, counter, wordNumber, styl }) {
+function Head({ score, counter, wordNumber, styl }) {
   return (
     <div
       className="row fs-4 p-3"
@@ -29,3 +29,5 @@ export default function Head({ score, counter, wordNumber, styl }) {
     </div>
   );
 }
+
+export default memo(Head)

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 
-export default function NewWord({ styl, newWord }) {
+function NewWord({ styl, newWord }) {
   return (
     <div
       className="text-center fs-3"
@@ -26,3 +26,5 @@ export default function NewWord({ styl, newWord }) {
     </div>
   );
 }
+
+export default memo(NewWord)
