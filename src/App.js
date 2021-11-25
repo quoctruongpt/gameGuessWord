@@ -1,35 +1,14 @@
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Modal, Button } from "react-bootstrap";
+import ScoreModal from "./components/ScoreModal";
+import words from "./components/data";
 import "./App.css";
-
-const words = [
-  "APPLE",
-  "CAT",
-  "TOMATO",
-  "KINGKONG",
-  "MOON",
-  "LAPTOP",
-  "COMPUTER",
-  "LOVE",
-  "COCACOLA",
-  "PEPSI",
-  "MISS",
-  "PAPER",
-  "TABLE",
-  "EXIT",
-  "REACTJS",
-  "CODE",
-  "WATER",
-  "LIGHT",
-  "FLOOR",
-  "MUSIC",
-  "TELEPHONE",
-  "MOBILE",
-];
+import GroupButton from "./components/button";
+import NewWord from "./components/newWord";
+import AnswerInput from "./components/answerInput";
+import Head from "./components/head";
 
 function App() {
-  
   const [show, setShow] = useState(false); // biến hiển thị modal thông báo tổng điểm (true: hiện, false: ẩn)
   const [styl, setStyle] = useState(0); // biến đánh dấu đúng sai (0: chưa xác định, 1: đúng, 2: sai)
   const [timer, setTimer] = useState(); // hàm setTimeOut đếm ngược thời gian
@@ -42,13 +21,6 @@ function App() {
   );
   const [newWord, setNewWord] = useState(""); // biến lưu word đã được khuyết chữ
   const [answer, setAnswer] = useState("_"); // biến lưu đáp án người dùng nhập
-
-  // hàm thay thế ký tự "_" bằng ký tự người dùng nhập vào
-  const display = (symbol) => {
-    if (symbol) {
-      setAnswer((prev) => prev.replace("_", symbol));
-    }
-  };
 
   // hàm sau khi người dùng ấn chơi lại trên modal
   const handleClose = () => {
@@ -149,157 +121,23 @@ function App() {
       className="container-sm pb-3 rounded mt-2"
       style={{ maxWidth: "450px", backgroundColor: "#5b49ab" }}
     >
-
       {/* phần head */}
-      <div
-        className="row fs-4 p-3"
-        style={{ backgroundColor: "#211945", color: "white" }}
-      >
-        <div className="col-4 mx-auto" id="score">
-          <p>SCORE:</p>
-          {score}
-        </div>
-        <div className="col-4 text-center" id="wordNumber">
-          {wordNumber} / 10
-          <div className="fs-2">
-            {styl === 1 ? (
-              <i className="fas fa-check-circle" style={{ color: "green" }}></i>
-            ) : styl === 2 ? (
-              <i className="fas fa-times-circle" style={{ color: "red" }}></i>
-            ) : (
-              ""
-            )}
-          </div>
-        </div>
-        <div className="col-4 text-end" id="timer">
-          <p>TIMER:</p>
-          {counter}
-        </div>
-      </div>
+      <Head
+        score={score}
+        counter={counter}
+        wordNumber={wordNumber}
+        styl={styl}
+      />
 
       {/* phần body */}
       <div className="body mt-3 ">
-        <div className="input-group ">
-          <input
-            type="text"
-            style={{ backgroundColor: "#211945", color: "white" }}
-            className="form-control text-center fs-3 me-5 ms-5"
-            value={answer}
-            disabled
-          />
-        </div>
-        <div id="button">
-          <div className="grid m-5">
-            <div
-              onClick={() => display("A")}
-              onClick={() => display("A")}
-              className="padButton A"
-            >
-              A
-            </div>
-            <div onClick={() => display("B")} className="padButton B">
-              B
-            </div>
-            <div onClick={() => display("C")} className="padButton C">
-              C
-            </div>
-            <div onClick={() => display("D")} className="padButton D">
-              D
-            </div>
-            <div onClick={() => display("E")} className="padButton E">
-              E
-            </div>
-            <div onClick={() => display("F")} className="padButton F">
-              F
-            </div>
-            <div onClick={() => display("G")} className="padButton G">
-              G
-            </div>
-            <div onClick={() => display("H")} className="padButton H">
-              H
-            </div>
-            <div onClick={() => display("I")} className="padButton I">
-              I
-            </div>
-            <div onClick={() => display("J")} className="padButton I">
-              J
-            </div>
-            <div onClick={() => display("K")} className="padButton K">
-              K
-            </div>
-            <div onClick={() => display("L")} className="padButton L">
-              L
-            </div>
-            <div onClick={() => display("M")} className="padButton M">
-              M
-            </div>
-            <div onClick={() => display("N")} className="padButton N">
-              N
-            </div>
-            <div onClick={() => display("O")} className="padButton O">
-              O
-            </div>
-            <div onClick={() => display("P")} className="padButton P">
-              P
-            </div>
-            <div onClick={() => display("Q")} className="padButton Q">
-              Q
-            </div>
-            <div onClick={() => display("R")} className="padButton R">
-              R
-            </div>
-            <div onClick={() => display("S")} className="padButton S">
-              S
-            </div>
-            <div onClick={() => display("T")} className="padButton T">
-              T
-            </div>
-            <div onClick={() => display("U")} className="padButton U">
-              U
-            </div>
-            <div onClick={() => display("V")} className="padButton V">
-              V
-            </div>
-            <div onClick={() => display("W")} className="padButton W">
-              W
-            </div>
-            <div onClick={() => display("X")} className="padButton X">
-              X
-            </div>
-            <div onClick={() => display("Y")} className="padButton Y">
-              Y
-            </div>
-            <div onClick={() => display("Z")} className="padButton Z">
-              Z
-            </div>
-          </div>
-        </div>
-        <div
-          className="text-center fs-3"
-          style={
-            styl === 0
-              ? { border: "2px solid white", color: "white"}
-              : styl === 1
-              ? {animationName: "borderr", animationDuration: "0.5s", animationIterationCount: "1000", color: "white"}
-              : {animationName: "border2", animationDuration: "0.5s", animationIterationCount: "1000", color: "white"}
-          }
-        >
-          {newWord}
-        </div>
+        <AnswerInput answer={answer} />
+        <GroupButton setAnswer={setAnswer} />
+        <NewWord styl={styl} newWord={newWord} />
       </div>
 
       {/* Modal thông báo điểm */}
-      <Modal show={show}>
-        <Modal.Header closeButton>
-          <Modal.Title>Bạn thắng</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Woohoo, bạn đã xuất sắc đạt được: {score} điểm</Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            Chơi lại
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ScoreModal score={score} show={show} onClose={handleClose} />
     </div>
   );
 }

@@ -1,0 +1,26 @@
+const words = [
+  "APPLE",
+  "CAT",
+  "TOMATO",
+  "KINGKONG",
+  "MOON",
+  "LAPTOP",
+  "COMPUTER",
+  "LOVE",
+  "COCACOLA",
+  "PEPSI",
+  "MISS",
+  "PAPER",
+  "TABLE",
+  "EXIT",
+  "REACTJS",
+  "CODE",
+  "WATER",
+  "LIGHT",
+  "FLOOR",
+  "MUSIC",
+  "TELEPHONE",
+  "MOBILE",
+];
+
+export default words;
