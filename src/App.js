@@ -29,35 +29,43 @@ const words = [
 ];
 
 function App() {
-  const [show, setShow] = useState(false);
-  const [styl, setStyle] = useState(0);
-  const [timer, setTimer] = useState();
-  const [counter, setCounter] = useState(10);
-  const [score, setScore] = useState(0);
-  const [wordNumber, setWordNumber] = useState(1);
+  
+  const [show, setShow] = useState(false); // biến hiển thị modal thông báo tổng điểm (true: hiện, false: ẩn)
+  const [styl, setStyle] = useState(0); // biến đánh dấu đúng sai (0: chưa xác định, 1: đúng, 2: sai)
+  const [timer, setTimer] = useState(); // hàm setTimeOut đếm ngược thời gian
+  const [counter, setCounter] = useState(10); // biến đếm giây
+  const [score, setScore] = useState(0); // biến điểm
+  const [wordNumber, setWordNumber] = useState(1); // biến câu hỏi hiện tại
+  // biến lưu word hiện tại
   const [word, setWord] = useState(
     words[Math.floor(Math.random() * words.length)]
   );
-  const [newWord, setNewWord] = useState("");
-  const [answer, setAnswer] = useState("_");
+  const [newWord, setNewWord] = useState(""); // biến lưu word đã được khuyết chữ
+  const [answer, setAnswer] = useState("_"); // biến lưu đáp án người dùng nhập
 
+  // hàm thay thế ký tự "_" bằng ký tự người dùng nhập vào
   const display = (symbol) => {
     if (symbol) {
       setAnswer((prev) => prev.replace("_", symbol));
     }
   };
 
+  // hàm sau khi người dùng ấn chơi lại trên modal
   const handleClose = () => {
     setScore(0);
     setShow(false);
-    clearTimeout(timer);
     setWordNumber(1);
-    setCounter(10);
     setWord(words[Math.floor(Math.random() * words.length)]);
+    clearTimeout(timer);
+    setCounter(10);
   };
+
+  // hàm hiển thị modal thông báo điẻm
   const handleShow = () => setShow(true);
 
+  // hàm xử lý khi counter thay đổi
   useEffect(() => {
+    // xử lý khi hết thời gian 10s
     if (counter === 0) {
       setStyle(2);
       setNewWord(word);
@@ -70,6 +78,7 @@ function App() {
       return;
     }
 
+    // tự động giảm counter sau mỗi 1s
     setTimer(
       setTimeout(() => {
         setCounter(counter - 1);
@@ -77,7 +86,9 @@ function App() {
     );
   }, [counter]);
 
+  // hàm xử lý khi người dùng nhập vào từ bàn phím
   useEffect(() => {
+    // kiểm tra xem còn khuyết chữ hay không? nếu không thì xử lý
     if (answer.includes("_") === false) {
       if (answer === word) {
         setStyle(1);
@@ -101,6 +112,7 @@ function App() {
     }
   }, [answer]);
 
+  // hàm tạo chữ khuyết mỗi khi word thay đổi
   useEffect(() => {
     const arr = word.split("");
     const newArr = arr.map((item, index) => {
@@ -118,12 +130,14 @@ function App() {
     setNewWord(newArr.join(""));
   }, [word]);
 
+  // thay đổi answer hiển thị theo newWord
   useEffect(() => {
     if (styl === 0) {
       if (newWord) setAnswer(newWord);
     }
   }, [newWord]);
 
+  // hiện modal khi số câu hỏi vượt quá 10
   useEffect(() => {
     if (wordNumber === 11) {
       handleShow();
@@ -135,6 +149,8 @@ function App() {
       className="container-sm pb-3 rounded mt-2"
       style={{ maxWidth: "450px", backgroundColor: "#5b49ab" }}
     >
+
+      {/* phần head */}
       <div
         className="row fs-4 p-3"
         style={{ backgroundColor: "#211945", color: "white" }}
@@ -160,6 +176,8 @@ function App() {
           {counter}
         </div>
       </div>
+
+      {/* phần body */}
       <div className="body mt-3 ">
         <div className="input-group ">
           <input
@@ -269,6 +287,8 @@ function App() {
           {newWord}
         </div>
       </div>
+
+      {/* Modal thông báo điểm */}
       <Modal show={show}>
         <Modal.Header closeButton>
           <Modal.Title>Bạn thắng</Modal.Title>
